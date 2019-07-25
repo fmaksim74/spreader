@@ -21,21 +21,17 @@ public class SpreadRollAlgo {
 		int distanceBetweenEqualCollections = 0;
 		int maxIndex = 0;
 		int maxValue = 0;
-
 		boolean collectionsEqual = false;
 
-		while (!collectionsEqual) {
-
-			maxIndex = 0;
-			maxValue = 0;
-
-			// find max value
-			for (int i = 0; i < inputCollection.length; ++i) {
-				if (inputCollection[i] > maxValue) {
-					maxValue = inputCollection[i];
-					maxIndex = i;
-				}
+		// find first max value
+		for (int i = 0; i < inputCollection.length; ++i) {
+			if (inputCollection[i] > maxValue) {
+				maxValue = inputCollection[i];
+				maxIndex = i;
 			}
+		}
+
+		while (!collectionsEqual) {
 
 			int delta = maxValue / inputCollection.length;
 			int reminder = maxValue % inputCollection.length;
@@ -63,7 +59,7 @@ public class SpreadRollAlgo {
 				++inputCollection[maxIndex++];
 				--reminder;
 			}
-			
+
 			Iterator<int[]> it = listOfStepCollections.iterator();
 			distanceBetweenEqualCollections = 0;
 			while (it.hasNext()) {

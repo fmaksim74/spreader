@@ -3,10 +3,22 @@ package arraydistibution;
 import java.util.*;
 
 public class ArraySpreader {
-	private final int[] array;
+	private int[] array;
 
 	public int[] getArray() {
 		return array;
+	}
+
+	public ArraySpreader setArray(int[] array) {
+		this.array = array;
+		this.arrayHash = 0;
+		this.arrayHashes.clear();
+		this.cycleLength = 0;
+		this.elapsedTime = 0;
+		this.maxIndex = 0;
+		this.maxValue = 0;
+		this.stepCount = 0;
+		return this;
 	}
 
 	private int arrayHash;
@@ -44,6 +56,9 @@ public class ArraySpreader {
 	}
 
 	public void SpreadArray() {
+		if (this.array == null) {
+			return;
+		}
 		if (this.stepCount > 0) {
 			return;
 		}
@@ -113,8 +128,11 @@ public class ArraySpreader {
 
 	@Override
 	public String toString() {
-		return "ArraySpreader [array=" + Arrays.toString(array) + ", arrayHash=" + arrayHash + ", stepCount="
-				+ stepCount + ", cycleLength=" + cycleLength + "]";
+		return "ArraySpreader [array=" + (this.array != null ? Arrays.toString(array) : "empty") + ", arrayHash="
+				+ arrayHash + ", stepCount=" + stepCount + ", cycleLength=" + cycleLength + ", elapsedTime=" + elapsedTime +"]";
+	}
+
+	public ArraySpreader() {
 	}
 
 	public ArraySpreader(int[] array) {

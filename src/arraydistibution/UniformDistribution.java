@@ -1,8 +1,8 @@
-package spreadroll;
+package arraydistibution;
 
 import java.util.*;
 
-public class SpreadRollAlgo {
+public class UniformDistribution {
 
 	public static void printArray(int[] arr, String msg) {
 		System.out.print(msg);
@@ -43,21 +43,32 @@ public class SpreadRollAlgo {
 			inputCollection[maxIndex++] = 0;
 			int oldMaxIndex = maxIndex;
 			int oldMaxValue = maxValue;
+			maxValue = 0;
 
 			while (oldMaxValue > reminder) {
 				if (oldMaxIndex >= inputCollection.length) {
 					oldMaxIndex = 0;
 				}
-				inputCollection[oldMaxIndex++] += delta;
+				inputCollection[oldMaxIndex] += delta;
+				if (inputCollection[oldMaxIndex] > maxValue) {
+					maxValue = inputCollection[oldMaxIndex];
+					maxIndex = oldMaxIndex;
+				}
 				oldMaxValue -= delta;
+				++oldMaxIndex;
 			}
 
 			while (reminder > 0) {
-				if (maxIndex >= inputCollection.length) {
-					maxIndex = 0;
+				if (oldMaxIndex >= inputCollection.length) {
+					oldMaxIndex = 0;
 				}
-				++inputCollection[maxIndex++];
+				++inputCollection[oldMaxIndex];
+				if (inputCollection[oldMaxIndex] > maxValue) {
+					maxValue = inputCollection[oldMaxIndex];
+					maxIndex = oldMaxIndex;
+				}
 				--reminder;
+				++oldMaxIndex;
 			}
 
 			Iterator<int[]> it = listOfStepCollections.iterator();

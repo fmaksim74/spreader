@@ -4,11 +4,13 @@ import java.util.*;
 
 public class ArraySpreader {
 	private final int[] array;
+
 	public int[] getArray() {
 		return array;
 	}
 
 	private int arrayHash;
+
 	public int getArrayHash() {
 		return this.arrayHash;
 	}
@@ -18,32 +20,44 @@ public class ArraySpreader {
 	private int maxIndex;
 
 	private int stepCount;
+
 	public int getStepCount() {
 		this.SpreadArray();
 		return this.stepCount;
 	}
-	
+
 	private int cycleLength;
+
 	public int getCycleLength() {
 		this.SpreadArray();
 		return this.cycleLength;
 	}
-	
-	private long elpsedTime;
+
+	private long elapsedTime;
+
 	public long getElapsedTime() {
-		return this.elpsedTime;
+		return this.elapsedTime;
 	}
+
 	public double getElapsedTimeInSeconds() {
-		return this.elpsedTime / Math.pow(10, 9);
+		return this.elapsedTime / Math.pow(10, 9);
 	}
-	
+
 	public void SpreadArray() {
 		if (this.stepCount > 0) {
 			return;
 		}
-		
+
 		long startTime = System.nanoTime();
-		
+
+		// Initialize max value and it index
+		for (int i = 0; i < this.array.length; ++i) {
+			if (this.array[i] > this.maxValue) {
+				maxValue = this.array[i];
+				maxIndex = i;
+			}
+		}
+
 		while (!this.arrayHashes.contains(this.arrayHash)) {
 
 			this.arrayHashes.add(this.arrayHash);
@@ -94,7 +108,7 @@ public class ArraySpreader {
 		}
 		this.stepCount = this.arrayHashes.size();
 		this.cycleLength = this.stepCount - this.arrayHashes.indexOf(this.arrayHash);
-		this.elpsedTime = System.nanoTime() - startTime;
+		this.elapsedTime = System.nanoTime() - startTime;
 	}
 
 	@Override
@@ -105,13 +119,5 @@ public class ArraySpreader {
 
 	public ArraySpreader(int[] array) {
 		this.array = array;
-		// Initialize max value and it index
-		int currentIndex = 0;
-		for (int i = 0; i < this.array.length; ++i) {
-			if (this.array[i] > this.maxValue) {
-				maxValue = this.array[i];
-				maxIndex = i;
-			}
-		}
 	}
 }

@@ -11,7 +11,7 @@ public class ArraySpreader {
 
 	public ArraySpreader setArray(int[] array) {
 		this.array = array;
-		this.arrayHash = 0;
+		this.arrayHash = Arrays.hashCode(this.array);
 		this.arrayHashes.clear();
 		this.cycleLength = 0;
 		this.elapsedTime = 0;
@@ -28,6 +28,7 @@ public class ArraySpreader {
 	}
 
 	private List<Integer> arrayHashes = new LinkedList<>();
+
 	private int maxValue;
 	private int maxIndex;
 
@@ -65,7 +66,7 @@ public class ArraySpreader {
 
 		long startTime = System.nanoTime();
 
-		// Initialize max value and it index
+		// Initialize max value and max value index
 		for (int i = 0; i < this.array.length; ++i) {
 			if (this.array[i] > this.maxValue) {
 				maxValue = this.array[i];
@@ -73,53 +74,53 @@ public class ArraySpreader {
 			}
 		}
 
+		// System.out.println(Arrays.toString(this.array) + " maxIndex="+maxIndex + " maxValue=" + maxValue);
+
 		while (!this.arrayHashes.contains(this.arrayHash)) {
 
 			this.arrayHashes.add(this.arrayHash);
 
 			int delta = this.maxValue / this.array.length;
-			int reminder = this.maxValue % this.array.length;
 			if (delta <= 0) {
 				delta = 1;
-				reminder = 0;
 			}
 
-			this.array[maxIndex++] = 0;
+			this.array[maxIndex] = 0;
 
 			int oldMaxIndex = this.maxIndex;
 			int oldMaxValue = this.maxValue;
+			int arraySize = this.array.length;
 
 			this.maxValue = 0;
 
-			while (oldMaxValue > reminder) {
+			while (arraySize > 0 || oldMaxValue > 0) {
+
+				++oldMaxIndex;
+
 				if (oldMaxIndex >= this.array.length) {
 					oldMaxIndex = 0;
 				}
-				this.array[oldMaxIndex] += delta;
+
+				if (oldMaxValue >= delta) {
+					this.array[oldMaxIndex] += delta;
+					oldMaxValue -= delta;
+				} else {
+					if (oldMaxValue > 0) {
+						++this.array[oldMaxIndex];
+						--oldMaxValue;
+					}
+				}
 
 				if (this.array[oldMaxIndex] >= maxValue) {
 					this.maxValue = this.array[oldMaxIndex];
 					this.maxIndex = oldMaxIndex;
 				}
-				oldMaxValue -= delta;
-				++oldMaxIndex;
-			}
 
-			while (reminder > 0) {
-				if (oldMaxIndex >= this.array.length) {
-					oldMaxIndex = 0;
-				}
-				++this.array[oldMaxIndex];
-
-				if (this.array[oldMaxIndex] > this.maxValue) {
-					this.maxValue = this.array[oldMaxIndex];
-					this.maxIndex = oldMaxIndex;
-				}
-				--reminder;
-				++oldMaxIndex;
+				--arraySize;
 			}
 
 			this.arrayHash = Arrays.hashCode(this.array);
+			//System.out.println(Arrays.toString(this.array) + " maxIndex="+maxIndex + " maxValue=" + maxValue);
 		}
 		this.stepCount = this.arrayHashes.size();
 		this.cycleLength = this.stepCount - this.arrayHashes.indexOf(this.arrayHash);
@@ -129,13 +130,14 @@ public class ArraySpreader {
 	@Override
 	public String toString() {
 		return "ArraySpreader [array=" + (this.array != null ? Arrays.toString(array) : "empty") + ", arrayHash="
-				+ arrayHash + ", stepCount=" + stepCount + ", cycleLength=" + cycleLength + ", elapsedTime=" + elapsedTime +"]";
+				+ arrayHash + ", stepCount=" + stepCount + ", cycleLength=" + cycleLength + ", elapsedTime="
+				+ elapsedTime + "]";
 	}
 
 	public ArraySpreader() {
 	}
 
 	public ArraySpreader(int[] array) {
-		this.array = array;
+		this.setArray(array);
 	}
 }

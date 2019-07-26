@@ -56,12 +56,12 @@ public class ArraySpreader {
 		return this.elapsedTime / Math.pow(10, 9);
 	}
 
-	public void SpreadArray() {
+	public ArraySpreader SpreadArray() {
 		if (this.array == null) {
-			return;
+			return this;
 		}
 		if (this.stepCount > 0) {
-			return;
+			return this;
 		}
 
 		long startTime = System.nanoTime();
@@ -125,6 +125,7 @@ public class ArraySpreader {
 		this.stepCount = this.arrayHashes.size();
 		this.cycleLength = this.stepCount - this.arrayHashes.indexOf(this.arrayHash);
 		this.elapsedTime = System.nanoTime() - startTime;
+		return this;
 	}
 
 	@Override

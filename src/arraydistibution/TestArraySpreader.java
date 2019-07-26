@@ -7,10 +7,9 @@ public class TestArraySpreader {
 
 	private static void doArray(int[] array) {
 		
-		//System.out.println(Arrays.toString(array));
+		System.out.println(Arrays.toString(array));
 		long start = System.nanoTime();
-		spreader.setArray(array);
-		spreader.SpreadArray();
+		spreader.setArray(array).SpreadArray();
 		long total = System.nanoTime() - start;
 
 		System.out.println(spreader);
